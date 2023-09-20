@@ -1,4 +1,4 @@
-//converting values
+//convertion
 
 let score = "33"
 console.log(typeof score) //string
@@ -21,3 +21,16 @@ null => 0
 true => 1
 false => 0
 * */
+
+//Operation
+
+// console.log(2+2)
+// console.log(2-2)
+// console.log(2*2)
+// console.log(2/2)
+// console.log(2%2)
+// console.log(2**3)
+
+let num1, num2;
+num1 = num2 = 3
+
