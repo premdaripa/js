@@ -28,3 +28,7 @@ const obj = {}
 // converting obj keys to array then legth check
 if (Object.keys(obj).length === 0) consloe,log("Empty object")
 */
+
+let val;
+val = null ?? 3 ?? 10
+console.log(val) // 3
