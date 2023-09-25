@@ -1,90 +1,87 @@
-const userInput = document.querySelector('#guess-number')
-const submit = document.getElementById('btn')
+const input = document.querySelector('#user-input')
+const submit = document.querySelector('#submit')
 
-const startOver = document.querySelector('.result-para')
-const guessSlot = document.querySelector('.guess')
-const remainingSlot = document.querySelector('.lastResult')
-const lowOrHi = document.querySelector('.lowOrHi')
+const resultSection = document.querySelector('.result-section')
+const guessList = document.querySelector('.guess-list')
+const chances = document.querySelector('.chances')
+const highOrLow = document.querySelector('.highOrLow')
 
-let randomNumber = Math.floor((Math.random() * 100) + 1)
+const p = document.createElement('p')
 
-const p = document.createElement('p');
+let remainingChances = 1
+let guess = []
 
-let prevGuess = []
-let numGuess = 1
-let playGame = true 
+//genrateing random number
+let randomNumber = Math.floor((Math.random() * 100)+1)
+
+//adding eventlistner 
+submit.addEventListener('click',(e) => {
+    e.preventDefault()
+    inputValidate(parseInt(input.value))
+})
 
 
-if(playGame) {
-    submit.addEventListener('click', (e) => {
-        e.preventDefault()
-        validateGuess(parseInt(userInput.value))
-    })
-}
-
-const validateGuess = (guess) => {
-    if (isNaN(guess) || guess < 1 || guess > 100 ) {
+//validateing the input
+const inputValidate = (input) => {
+    if (input < 1 || input > 100 || isNaN(input)) {
         alert("Invalid input")
     } else {
-        prevGuess.push(userInput)
-        if (numGuess >= 11) {
-            displayGuess(guess)
-            displayMessage(`Game over. Random number was ${randomNumber}`)
+        if (remainingChances === 10 && input !== randomNumber) {
+            displayMessage(`Better luck next time. Random Number Was ${randomNumber}`)
             endGame()
-        }
-
-        else {
-            displayGuess(guess)
-            checkGuess(guess)
+        } else {
+            guess.push(input)
+            inputCheckWithRandom(input)
         }
     }
 }
 
-const checkGuess = (guess) => {
- if (guess === randomNumber) {
-    displayMessage(`You guessed it right`)
-    endGame()
- } else if (guess < randomNumber) {
-    displayMessage(`Number is too low`)
- } else if (guess > randomNumber) {
-    displayMessage(`Number is too high`)
- }
-
+//check the input match with random number
+const inputCheckWithRandom = (input) => {
+    if (input === randomNumber) {
+        displayMessage('You guessed it right')
+        /endGame()
+    } else if (input < randomNumber) {
+        displayMessage('Guessed number is too low')
+        updateGuesslist(input)
+        remainingChances++
+    } else {
+        displayMessage('Guessed number is too high')
+        updateGuesslist(input)
+        remainingChances++
+    }
 }
 
-function displayGuess(guess) {
-    userInput.value = ' '
-    guessSlot.innerHTML += `${guess} `
-    numGuess++
-    remainingSlot.innerHTML = `${11 - numGuess}`
+// guesslit and update remaining count function
+const updateGuesslist = (number) => {
+    guessList.innerHTML += `${number} `
+    chances.innerHTML = `${10 - remainingChances}`
+    input.value = ' '
 }
 
-function displayMessage(message) {
-    lowOrHi.innerHTML = `<h4>${message}</h4>`
+// display message function 
+const displayMessage = (message) => {
+    highOrLow.innerHTML = `<h3>${message}</h3>`
 }
 
-function newGame () {
-    const newGameBtn = document.querySelector('#newGame')
-    newGameBtn.addEventListener('click', () => {
-        randomNumber = Math.floor((Math.random() * 100) + 1)
-        prevGuess = []
-        numGuess = 1 
-        guessSlot.innerHTML = ""
-        remainingSlot.innerHTML = `${11 - numGuess}`
-        userInput.removeAttribute('disabled',' ')
-        startOver.removeChild(p)
+const endGame = () => {
+    input.setAttribute('disabled','')
+    p.innerHTML = '<h3 class="startNewGame">Start New Game</h3>'
+    resultSection.appendChild(p)
+    startGame()
+}
+
+//seeting everything to intial stage
+const startGame = () => {
+    const newGame = document.querySelector('.startNewGame')
+    newGame.addEventListener('click', () => {
+        randomNumber = Math.floor((Math.random() * 100)+1)
+        input.value = " "
+        remainingChances = 1
+        guessList.innerHTML = " "
+        chances.innerHTML = "10"
         displayMessage("")
-        playGame = true
+        input.removeAttribute('disabled', '')
+        resultSection.removeChild(p)
     })
-    
-}
-
-function endGame() {
-    userInput.value = ' '
-    userInput.setAttribute('disabled','')
-    p.classList.add('button')
-    p.innerHTML = `<h3 id='newGame'>Start new Game</h3>`
-    startOver.appendChild(p)
-    playGame = false
-    newGame()
 }
