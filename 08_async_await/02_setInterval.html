@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>setTimeout</title>
+</head>
+<body>
+    <h1>Async - await</h1>
+    <button class="start">Start</button>
+    <button class="stop">Stop</button>
+</body>
+<script>
+//    setInterval(() => {
+//     console.log('setInterval')
+//    },5000)
+
+  const sayTime = () => {
+    console.log(Date.now())
+  }
+  let intervalId;
+  document.querySelector('.start').addEventListener('click',() => {
+    intervalId = setInterval(sayTime,2000)
+  })
+  document.querySelector('.stop').addEventListener('click',() => {
+    clearInterval(intervalId)
+  })
+
+</script>
+</html>
